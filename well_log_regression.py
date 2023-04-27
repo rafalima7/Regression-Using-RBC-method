@@ -73,6 +73,7 @@ seaborn.pairplot(alaska2, hue='LOF', palette='Dark2')
 alaska2 = alaska2.drop(alaska2[alaska2['LOF']==-1].index)
 alaska2 = alaska2.drop(['LOF'], axis = 1)
 seaborn.pairplot(alaska2, palette='Dark2')
+<<<<<<< HEAD
 alaska2.corr()
 
 #%%
@@ -83,6 +84,8 @@ plt.figure(dpi=300)
 seaborn.pairplot(alaska2,hue='LOF', palette='Dark2', diag_kind= 'hist')
 
 
+=======
+>>>>>>> parent of 2546617 (Update well_log_regression.py)
 
 #%%
 alaska2['LOG'] = 2
@@ -109,6 +112,7 @@ alaska2 = alaska2.drop(alaska2[alaska2['LOF']==-1].index)
 alaska2 = alaska2.drop(['LOF'], axis = 1)
 seaborn.pairplot(alaska2)
 #%%
+<<<<<<< HEAD
 <<<<<<< HEAD
 X_alaska5 = np.array(alaska5.iloc[:,1:5])
 y_alaska5 = np.array(alaska5.iloc[:,0]).reshape(-1,1)
@@ -146,10 +150,15 @@ plt.plot(y_alaska5, alaska5.index)
 plt.plot(y_alaska5_pred, alaska5.index)
 plt.plot(y_alaska5_svr_pred, alaska5.index)
 =======
+=======
+>>>>>>> parent of 2546617 (Update well_log_regression.py)
 alaska3 = alaska3.drop(['LOG'], axis=1)
 X_alaska3 = alaska3.loc[:, ['NPHI', 'DT', 'GR', 'ILD']]
 lof = LocalOutlierFactor(n_neighbors=20,contamination=0.1)
 y_alaska2_lof = lof.fit_predict(X_alaska2)
 alaska2['LOF'] = y_alaska2_lof
 seaborn.pairplot(alaska2,hue='LOF', palette='Dark2')
+<<<<<<< HEAD
+>>>>>>> parent of 2546617 (Update well_log_regression.py)
+=======
 >>>>>>> parent of 2546617 (Update well_log_regression.py)
