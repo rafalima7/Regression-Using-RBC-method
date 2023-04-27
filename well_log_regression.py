@@ -55,19 +55,34 @@ alaska5 = lasio.read('well_logs/dados_alaska/dado5.las').df().loc[:,['RHOB','NPH
 
 #%% Remove outliers in Alaska 2
 seaborn.pairplot(alaska2)
+#%%
 alaska2['LOF'] = 1
-alaska2.loc[alaska2['RHOB'] < 2.2, 'LOF'] = -1
-alaska2.loc[alaska2['RHOB'] > 2.6, 'LOF'] = -1
-alaska2.loc[alaska2['ILD'] > 25, 'LOF'] = -1
-alaska2.loc[alaska2['DT'] < 75, 'LOF'] = -1
-alaska2.loc[alaska2['DT'] > 150, 'LOF'] = -1
-alaska2.loc[alaska2['NPHI'] > 55, 'LOF'] = -1
+alaska2.loc[(alaska2['RHOB'] < 2.2) | (alaska2['RHOB'] > 2.55), 'LOF'] = -1
+alaska2.loc[(alaska2['NPHI'] < 20) | (alaska2['NPHI'] > 55), 'LOF'] = -1
+alaska2.loc[(alaska2['DT'] < 75) | (alaska2['DT'] > 150), 'LOF'] = -1
+alaska2.loc[(alaska2['GR'] < 50) | (alaska2['GR'] > 120), 'LOF'] = -1
+alaska2.loc[(alaska2['ILD'] < 1) | (alaska2['ILD'] > 22), 'LOF'] = -1
+# alaska2.loc[alaska2['ILD'] > 25, 'LOF'] = -1
+# alaska2.loc[alaska2['DT'] < 75, 'LOF'] = -1
+# alaska2.loc[alaska2['DT'] > 150, 'LOF'] = -1
+# alaska2.loc[alaska2['NPHI'] > 55, 'LOF'] = -1
 
 seaborn.pairplot(alaska2, hue='LOF', palette='Dark2')
 
+#%%
 alaska2 = alaska2.drop(alaska2[alaska2['LOF']==-1].index)
 alaska2 = alaska2.drop(['LOF'], axis = 1)
 seaborn.pairplot(alaska2, palette='Dark2')
+alaska2.corr()
+
+#%%
+lof = LocalOutlierFactor(n_neighbors=10)
+y_alaska2_lof = lof.fit_predict(alaska2)
+alaska2['LOF'] = y_alaska2_lof
+plt.figure(dpi=300)
+seaborn.pairplot(alaska2,hue='LOF', palette='Dark2', diag_kind= 'hist')
+
+
 
 #%% Remove outliers in Alaska 3
 seaborn.pairplot(alaska3)
@@ -200,7 +215,13 @@ r_score(y_test_svr_pred,y_test)
 
 #%%
 
-y_alaska5_pred = svr_model.predict(X_alaska5_sclnd).reshape(-1,1)
+y_alaska5_svr_pred = svr_model.predict(X_alaska5_sclnd).reshape(-1,1)
 
 r_score(y_alaska5_pred,y_alaska5)
 
+#%%
+
+plt.figure(dpi=300,figsize=[10,20])
+plt.plot(y_alaska5, alaska5.index)
+plt.plot(y_alaska5_pred, alaska5.index)
+plt.plot(y_alaska5_svr_pred, alaska5.index)
